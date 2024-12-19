@@ -4,17 +4,12 @@ A Flutter application to efficiently manage your daily tasks. This app is design
 
 ## Features
 
-- ✅ Create, read, update, and delete tasks.
-- ✅ Mark tasks as completed or pending.
+- ✅ Create, read, and delete tasks.
+- ✅ Mark tasks as completed.
 
 ## Architecture
 
 This project leverages **Riverpod** for state management, providing a scalable and maintainable architecture.
-
-- **Riverpod** benefits:
-  - Global and local state control.
-  - Improved performance with a provider-based approach.
-  - Enhanced debugging experience.
 
 ## Installation
 
