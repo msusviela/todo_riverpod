@@ -16,7 +16,8 @@ class ToDoCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Checkbox(
       value: todo.completed,
-      onChanged: (_) => controller.updateToDo(toDo: todo),
+      onChanged: (_) => controller.updateToDo(
+          toDo: todo.copyWith(completed: !todo.completed)),
     );
   }
 }

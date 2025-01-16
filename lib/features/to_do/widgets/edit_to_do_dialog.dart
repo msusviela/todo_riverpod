@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
-class AddToDoDialog extends StatelessWidget {
-  const AddToDoDialog({
+class EditToDoDialog extends StatelessWidget {
+  const EditToDoDialog({
     super.key,
     required this.titleController,
-    required this.onAddToDo,
+    required this.onEditToDo,
+    this.editToDoTitle,
+    this.buttonConfirmationText,
   });
 
   final TextEditingController titleController;
-  final Function(String) onAddToDo;
+  final Function(String) onEditToDo;
+  final String? editToDoTitle;
+  final String? buttonConfirmationText;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add ToDo'),
+      title: Text(editToDoTitle ?? 'Update ToDo'),
       content: TextField(
         controller: titleController,
         decoration: const InputDecoration(
@@ -27,8 +31,8 @@ class AddToDoDialog extends StatelessWidget {
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: () => onAddToDo(titleController.text.trim()),
-          child: const Text('Add'),
+          onPressed: () => onEditToDo(titleController.text.trim()),
+          child: Text(buttonConfirmationText ?? 'Update'),
         ),
       ],
     );

@@ -28,9 +28,11 @@ class AddToDoButton extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddToDoDialog(
+        return EditToDoDialog(
           titleController: titleController,
-          onAddToDo: (title) {
+          editToDoTitle: 'Add ToDo',
+          buttonConfirmationText: 'Add',
+          onEditToDo: (title) {
             _addToDo(context: context, controller: controller, title: title);
           },
         );
