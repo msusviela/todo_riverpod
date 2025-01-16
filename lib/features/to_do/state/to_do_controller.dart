@@ -8,9 +8,7 @@ class ToDoController extends StateNotifier<List<ToDo>> {
   ToDoController(this.toDoRepository) : super(toDoRepository.getToDos());
 
   void addToDo({required String title}) {
-    final newId = state.isEmpty
-        ? 0
-        : state.map((todo) => todo.id).reduce((a, b) => a > b ? a : b) + 1;
+    final newId = state.isEmpty ? 0 : state.last.id + 1;
 
     final todo = ToDo(
       id: newId,
