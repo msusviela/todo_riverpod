@@ -1,12 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app/core/locator.dart';
 import 'package:todo_app/data/data.dart';
 import 'package:todo_app/domain/domain.dart';
-
-final todoControllerProvider =
-    StateNotifierProvider<ToDoController, List<ToDo>>(
-  (ref) => ToDoController(locator<ToDoRepository>()),
-);
 
 class ToDoController extends StateNotifier<List<ToDo>> {
   final ToDoRepository toDoRepository;

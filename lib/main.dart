@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/core/locator.dart';
-import 'package:todo_app/to_do/to_do.dart';
+import 'package:todo_app/features/to_do/to_do.dart';
 
 void main() {
   setupLocator();
