@@ -12,36 +12,53 @@ class ToDoTile extends ConsumerWidget {
 
   final ToDo todo;
 
+  void _confirmDelete(BuildContext context, ToDoController controller) {
+    showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Delete To Do"),
+        content: const Text("Are you sure you want to delete this task?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              controller.deleteToDo(id: todo.id);
+              Navigator.of(context).pop(true);
+            },
+            child: const Text("Delete"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(todoControllerProvider.notifier);
 
-    return ListTile(
-      title: Text(todo.title),
-      trailing: _ToDoOptions(todo: todo, controller: controller),
-    );
-  }
-}
-
-class _ToDoOptions extends StatelessWidget {
-  const _ToDoOptions({
-    required this.todo,
-    required this.controller,
-  });
-
-  final ToDo todo;
-  final ToDoController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ToDoCheckbox(todo: todo, controller: controller),
-        const SizedBox(width: 4),
-        ToDoDeleteButton(todo: todo, controller: controller),
-      ],
+    return Dismissible(
+      key: ValueKey(todo.id),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        color: const Color.fromARGB(255, 191, 48, 38),
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      confirmDismiss: (direction) async {
+        _confirmDelete(context, controller);
+        return null;
+      },
+      onDismissed: (_) {
+        controller.deleteToDo(id: todo.id);
+      },
+      child: ListTile(
+        title: Text(todo.title),
+        trailing: ToDoCheckbox(todo: todo, controller: controller),
+      ),
     );
   }
 }
