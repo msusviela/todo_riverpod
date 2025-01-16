@@ -4,26 +4,28 @@ import 'package:todo_app/domain/domain.dart';
 
 class ToDoController extends StateNotifier<List<ToDo>> {
   final ToDoRepository toDoRepository;
-  int currentId = 0;
 
   ToDoController(this.toDoRepository) : super(toDoRepository.getToDos());
 
   void addToDo({required String title}) {
+    final newId = state.isEmpty
+        ? 0
+        : state.map((todo) => todo.id).reduce((a, b) => a > b ? a : b) + 1;
+
     final todo = ToDo(
-      id: ++currentId,
+      id: newId,
       title: title,
       completed: false,
     );
     toDoRepository.addToDo(todo);
-    state = [...state, todo];
+    state = toDoRepository.getToDos().toList();
   }
 
   void updateToDo({required ToDo toDo}) {
-    final updatedToDo = toDo.copyWith(completed: !toDo.completed);
-    toDoRepository.updateToDo(updatedToDo);
+    toDoRepository.updateToDo(toDo);
     state = [
       for (final item in state)
-        if (item.id == updatedToDo.id) updatedToDo else item
+        if (item.id == toDo.id) toDo else item
     ];
   }
 
