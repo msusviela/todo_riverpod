@@ -1,4 +1,4 @@
-import 'package:todo_app/domain/domain.dart';
+import 'package:todo_app/features/to_do/to_do.dart';
 
 class ToDoRepository {
   final List<ToDo> toDos = [];

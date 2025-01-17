@@ -1,11 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app/data/data.dart';
-import 'package:todo_app/domain/domain.dart';
+import 'package:todo_app/features/to_do/to_do.dart';
 
-class ToDoController extends StateNotifier<List<ToDo>> {
+class ToDoNotifier extends StateNotifier<List<ToDo>> {
   final ToDoRepository toDoRepository;
 
-  ToDoController(this.toDoRepository) : super(toDoRepository.getToDos());
+  ToDoNotifier(this.toDoRepository) : super(toDoRepository.getToDos());
 
   void addToDo({required String title}) {
     final newId = state.isEmpty ? 1 : state.last.id + 1;

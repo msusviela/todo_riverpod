@@ -1,11 +1,8 @@
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:todo_app/core/providers/providers.dart';
-import 'package:todo_app/data/data.dart';
-import 'package:todo_app/domain/domain.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
-import 'utils/provider_container.dart';
+import 'utils/utils.dart';
 
 class MockToDoRepository extends Mock implements ToDoRepository {}
 
@@ -48,7 +45,7 @@ void main() {
   test('Must initialize with an empty list', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoController(mockRepository)),
+        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
       ],
     );
 
@@ -58,7 +55,7 @@ void main() {
   test('Must add a ToDo to the provider state', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoController(mockRepository)),
+        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
       ],
     );
 
@@ -72,7 +69,7 @@ void main() {
   test('Must delete a ToDo from the provider state', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoController(mockRepository)),
+        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
       ],
     );
 
@@ -88,7 +85,7 @@ void main() {
   test('Must update ToDo to be completed', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoController(mockRepository)),
+        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
       ],
     );
 
@@ -105,7 +102,7 @@ void main() {
   test('Must update To Do Title', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoController(mockRepository)),
+        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
       ],
     );
 

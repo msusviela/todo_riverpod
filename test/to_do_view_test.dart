@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:todo_app/core/providers/providers.dart';
-import 'package:todo_app/data/data.dart';
-import 'package:todo_app/domain/to_do.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
 class MockToDoRepository extends Mock implements ToDoRepository {}
@@ -19,7 +16,7 @@ void main() {
     return ProviderScope(
       overrides: [
         todoProvider.overrideWith(
-          (ref) => ToDoController(mockToDoRepository),
+          (ref) => ToDoNotifier(mockToDoRepository),
         ),
       ],
       child: const MaterialApp(home: ToDoView()),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app/core/providers/providers.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
 class AddToDoButton extends ConsumerWidget {
@@ -10,7 +9,7 @@ class AddToDoButton extends ConsumerWidget {
 
   void _addToDo({
     required BuildContext context,
-    required ToDoController controller,
+    required ToDoNotifier controller,
     required String title,
   }) {
     if (title.isNotEmpty) {
@@ -21,7 +20,7 @@ class AddToDoButton extends ConsumerWidget {
 
   void _showAddToDoDialog({
     required BuildContext context,
-    required ToDoController controller,
+    required ToDoNotifier controller,
   }) {
     final TextEditingController titleController = TextEditingController();
 

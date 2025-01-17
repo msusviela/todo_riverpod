@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/core/locator.dart';
-import 'package:todo_app/features/to_do/to_do.dart';
+import 'package:todo_app/features/home/home.dart';
 
 void main() {
   setupLocator();
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
-      body: const ToDoView(),
+      body: const HomeView(),
     );
   }
 }

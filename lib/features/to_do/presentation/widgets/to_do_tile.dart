@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:todo_app/core/providers/providers.dart';
-import 'package:todo_app/domain/domain.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
 class ToDoTile extends ConsumerWidget {
@@ -13,7 +11,7 @@ class ToDoTile extends ConsumerWidget {
 
   final ToDo todo;
 
-  void _confirmDelete(BuildContext context, ToDoController controller) {
+  void _confirmDelete(BuildContext context, ToDoNotifier controller) {
     showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -36,7 +34,7 @@ class ToDoTile extends ConsumerWidget {
     );
   }
 
-  void _editToDo(BuildContext context, ToDoController controller) {
+  void _editToDo(BuildContext context, ToDoNotifier controller) {
     final titleController = TextEditingController(text: todo.title);
 
     showDialog(

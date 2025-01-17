@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/domain/domain.dart';
 import 'package:todo_app/extensions/extensions.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
@@ -11,7 +10,7 @@ class ToDoCheckbox extends StatelessWidget {
   });
 
   final ToDo todo;
-  final ToDoController controller;
+  final ToDoNotifier controller;
 
   void _showSnackBar(BuildContext context, String message, bool isCompleted) {
     ScaffoldMessenger.of(context).showSnackBar(
