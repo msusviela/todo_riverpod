@@ -55,7 +55,7 @@ class ToDoTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(todoControllerProvider.notifier);
+    final controller = ref.watch(todoProvider.notifier);
 
     return Slidable(
       key: ValueKey(todo.id),
