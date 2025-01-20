@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:todo_app/features/home/home.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
 class MockToDoRepository extends Mock implements ToDoRepository {}
@@ -19,7 +20,7 @@ void main() {
           (ref) => ToDoNotifier(mockToDoRepository),
         ),
       ],
-      child: const MaterialApp(home: ToDoView()),
+      child: const MaterialApp(home: HomeView()),
     );
   }
 
