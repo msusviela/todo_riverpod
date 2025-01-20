@@ -12,7 +12,9 @@ class HomeView extends ConsumerWidget {
       length: 2,
       child: Scaffold(
         appBar: TabBar(
-          onTap: (index) => ref.read(tabIndexProvider.notifier).state = index,
+          onTap: (index) => ref.watch(homeStateProvider.notifier).update(
+                (state) => state.updateIndex(index),
+              ),
           tabs: const [
             Tab(text: 'Pending'),
             Tab(text: 'Completed'),

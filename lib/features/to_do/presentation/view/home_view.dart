@@ -7,7 +7,7 @@ class ToDoView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final toDos = ref.watch(todoProvider);
+    final toDos = ref.watch(todoProvider).toDos;
     final pendingToDos = toDos.where((toDo) => !toDo.completed).toList();
     final completedToDos = toDos.where((toDo) => toDo.completed).toList();
 

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:todo_app/features/to_do/presentation/notifiers/to_do_state.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
 import 'utils/utils.dart';
@@ -49,7 +50,7 @@ void main() {
       ],
     );
 
-    expect(container.read(todoProvider), isEmpty);
+    expect(container.read(todoProvider), const ToDoState(toDos: []));
   });
 
   test('Must add a ToDo to the provider state', () {
@@ -62,8 +63,9 @@ void main() {
     final controller = container.read(todoProvider.notifier);
     controller.addToDo(title: initialName);
 
-    expect(container.read(todoProvider).length, 1);
-    expect(container.read(todoProvider).first.title, initialName);
+    final toDos = container.read(todoProvider).toDos;
+    expect(toDos.length, 1);
+    expect(toDos.first.title, initialName);
   });
 
   test('Must delete a ToDo from the provider state', () {
@@ -75,11 +77,12 @@ void main() {
 
     final controller = container.read(todoProvider.notifier);
     controller.addToDo(title: initialName);
-    final toDo = container.read(todoProvider).first;
+    final toDos = container.read(todoProvider).toDos;
+    final toDo = toDos.first;
 
     controller.deleteToDo(id: toDo.id);
 
-    expect(container.read(todoProvider), isEmpty);
+    expect(container.read(todoProvider), const ToDoState(toDos: []));
   });
 
   test('Must update ToDo to be completed', () {
@@ -91,12 +94,14 @@ void main() {
 
     final controller = container.read(todoProvider.notifier);
     controller.addToDo(title: initialName);
-    final toDo = container.read(todoProvider).first;
+    final toDos = container.read(todoProvider).toDos;
+    final toDo = toDos.first;
 
     final updatedToDo = toDo.copyWith(completed: true);
     controller.updateToDo(toDo: updatedToDo);
 
-    expect(container.read(todoProvider).first.completed, isTrue);
+    final updatedToDos = container.read(todoProvider).toDos;
+    expect(updatedToDos.first.completed, isTrue);
   });
 
   test('Must update To Do Title', () {
@@ -108,12 +113,13 @@ void main() {
 
     final controller = container.read(todoProvider.notifier);
     controller.addToDo(title: initialName);
-    final toDo = container.read(todoProvider).first;
+    final toDo = container.read(todoProvider).toDos.first;
 
     const newName = 'New name';
     final updatedToDo = toDo.copyWith(title: newName);
     controller.updateToDo(toDo: updatedToDo);
 
-    expect(container.read(todoProvider).first.title, equals(newName));
+    final updatedToDos = container.read(todoProvider).toDos;
+    expect(updatedToDos.first.title, equals(newName));
   });
 }
