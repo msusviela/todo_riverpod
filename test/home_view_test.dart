@@ -20,7 +20,7 @@ void main() {
           (ref) => ToDoStateNotifier(toDoRepository: mockToDoRepository),
         ),
       ],
-      child: const MaterialApp(home: HomeView()),
+      child: const MaterialApp(home: HomePage()),
     );
   }
 
@@ -43,6 +43,7 @@ void main() {
   group('ToDoView Tests', () {
     testWidgets('Add a ToDo and display it in the Pending Tab', (tester) async {
       await tester.pumpWidget(buildApp());
+      await tester.pumpAndSettle();
 
       final addButtonFinder = find.byIcon(Icons.add);
       await tester.tap(addButtonFinder);
@@ -65,6 +66,8 @@ void main() {
     ));
 
     await tester.pumpWidget(buildApp());
+    await tester.pumpAndSettle();
+
     expect(find.widgetWithText(ListTile, 'Task 1'), findsOneWidget);
 
     final checkboxFinder = find.descendant(
@@ -90,6 +93,7 @@ void main() {
       completed: false,
     ));
     await tester.pumpWidget(buildApp());
+    await tester.pumpAndSettle();
 
     expect(find.text('Task 1'), findsOneWidget);
 
@@ -119,6 +123,7 @@ void main() {
       completed: false,
     ));
     await tester.pumpWidget(buildApp());
+    await tester.pumpAndSettle();
 
     expect(find.text('Task 1'), findsOneWidget);
 
