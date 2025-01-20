@@ -16,8 +16,8 @@ void main() {
   Widget buildApp() {
     return ProviderScope(
       overrides: [
-        todoProvider.overrideWith(
-          (ref) => ToDoNotifier(mockToDoRepository),
+        toDoProvider.overrideWith(
+          (ref) => ToDoStateNotifier(toDoRepository: mockToDoRepository),
         ),
       ],
       child: const MaterialApp(home: HomeView()),

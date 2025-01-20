@@ -11,7 +11,7 @@ class ToDoTile extends ConsumerWidget {
 
   final ToDo todo;
 
-  void _confirmDelete(BuildContext context, ToDoNotifier controller) {
+  void _confirmDelete(BuildContext context, ToDoStateNotifier controller) {
     showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -34,7 +34,7 @@ class ToDoTile extends ConsumerWidget {
     );
   }
 
-  void _editToDo(BuildContext context, ToDoNotifier controller) {
+  void _editToDo(BuildContext context, ToDoStateNotifier controller) {
     final titleController = TextEditingController(text: todo.title);
 
     showDialog(
@@ -53,7 +53,7 @@ class ToDoTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(todoProvider.notifier);
+    final controller = ref.watch(toDoProvider.notifier);
 
     return Slidable(
       key: ValueKey(todo.id),

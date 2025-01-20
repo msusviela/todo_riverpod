@@ -12,4 +12,12 @@ class ToDoState with _$ToDoState {
   const factory ToDoState({
     required List<ToDo> toDos,
   }) = _ToDoState;
+
+  static ToDoState initial() {
+    return const ToDoState(toDos: []);
+  }
+}
+
+extension ToDoStateExtension on ToDoState {
+  ToDoState get withEmptyToDos => copyWith(toDos: []);
 }

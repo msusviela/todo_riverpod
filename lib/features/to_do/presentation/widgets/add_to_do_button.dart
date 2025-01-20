@@ -9,7 +9,7 @@ class AddToDoButton extends ConsumerWidget {
 
   void _addToDo({
     required BuildContext context,
-    required ToDoNotifier controller,
+    required ToDoStateNotifier controller,
     required String title,
   }) {
     if (title.isNotEmpty) {
@@ -20,7 +20,7 @@ class AddToDoButton extends ConsumerWidget {
 
   void _showAddToDoDialog({
     required BuildContext context,
-    required ToDoNotifier controller,
+    required ToDoStateNotifier controller,
   }) {
     final TextEditingController titleController = TextEditingController();
 
@@ -41,7 +41,7 @@ class AddToDoButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(todoProvider.notifier);
+    final controller = ref.watch(toDoProvider.notifier);
 
     return FloatingActionButton(
       onPressed: () => _showAddToDoDialog(

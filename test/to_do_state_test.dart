@@ -46,24 +46,26 @@ void main() {
   test('Must initialize with an empty list', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
+        toDoProvider.overrideWith(
+            (ref) => ToDoStateNotifier(toDoRepository: mockRepository)),
       ],
     );
 
-    expect(container.read(todoProvider), const ToDoState(toDos: []));
+    expect(container.read(toDoProvider), const ToDoState(toDos: []));
   });
 
   test('Must add a ToDo to the provider state', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
+        toDoProvider.overrideWith(
+            (ref) => ToDoStateNotifier(toDoRepository: mockRepository)),
       ],
     );
 
-    final controller = container.read(todoProvider.notifier);
+    final controller = container.read(toDoProvider.notifier);
     controller.addToDo(title: initialName);
 
-    final toDos = container.read(todoProvider).toDos;
+    final toDos = container.read(toDoProvider).toDos;
     expect(toDos.length, 1);
     expect(toDos.first.title, initialName);
   });
@@ -71,55 +73,58 @@ void main() {
   test('Must delete a ToDo from the provider state', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
+        toDoProvider.overrideWith(
+            (ref) => ToDoStateNotifier(toDoRepository: mockRepository)),
       ],
     );
 
-    final controller = container.read(todoProvider.notifier);
+    final controller = container.read(toDoProvider.notifier);
     controller.addToDo(title: initialName);
-    final toDos = container.read(todoProvider).toDos;
+    final toDos = container.read(toDoProvider).toDos;
     final toDo = toDos.first;
 
     controller.deleteToDo(id: toDo.id);
 
-    expect(container.read(todoProvider), const ToDoState(toDos: []));
+    expect(container.read(toDoProvider), const ToDoState(toDos: []));
   });
 
   test('Must update ToDo to be completed', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
+        toDoProvider.overrideWith(
+            (ref) => ToDoStateNotifier(toDoRepository: mockRepository)),
       ],
     );
 
-    final controller = container.read(todoProvider.notifier);
+    final controller = container.read(toDoProvider.notifier);
     controller.addToDo(title: initialName);
-    final toDos = container.read(todoProvider).toDos;
+    final toDos = container.read(toDoProvider).toDos;
     final toDo = toDos.first;
 
     final updatedToDo = toDo.copyWith(completed: true);
     controller.updateToDo(toDo: updatedToDo);
 
-    final updatedToDos = container.read(todoProvider).toDos;
+    final updatedToDos = container.read(toDoProvider).toDos;
     expect(updatedToDos.first.completed, isTrue);
   });
 
   test('Must update To Do Title', () {
     final container = createContainer(
       overrides: [
-        todoProvider.overrideWith((ref) => ToDoNotifier(mockRepository)),
+        toDoProvider.overrideWith(
+            (ref) => ToDoStateNotifier(toDoRepository: mockRepository)),
       ],
     );
 
-    final controller = container.read(todoProvider.notifier);
+    final controller = container.read(toDoProvider.notifier);
     controller.addToDo(title: initialName);
-    final toDo = container.read(todoProvider).toDos.first;
+    final toDo = container.read(toDoProvider).toDos.first;
 
     const newName = 'New name';
     final updatedToDo = toDo.copyWith(title: newName);
     controller.updateToDo(toDo: updatedToDo);
 
-    final updatedToDos = container.read(todoProvider).toDos;
+    final updatedToDos = container.read(toDoProvider).toDos;
     expect(updatedToDos.first.title, equals(newName));
   });
 }

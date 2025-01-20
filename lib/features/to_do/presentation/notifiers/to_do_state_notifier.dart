@@ -2,11 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todo_app/features/to_do/presentation/notifiers/to_do_state.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
-class ToDoNotifier extends StateNotifier<ToDoState> {
+class ToDoStateNotifier extends StateNotifier<ToDoState> {
+  ToDoStateNotifier({required this.toDoRepository})
+      : super(ToDoState.initial());
+
   final ToDoRepository toDoRepository;
 
-  ToDoNotifier(this.toDoRepository)
-      : super(ToDoState(toDos: toDoRepository.getToDos()));
+  Future<void> loadToDos() async {
+    final toDos = await toDoRepository.getToDos();
+    state = state.copyWith(toDos: toDos);
+  }
 
   void addToDo({required String title}) {
     final toDos = state.toDos;

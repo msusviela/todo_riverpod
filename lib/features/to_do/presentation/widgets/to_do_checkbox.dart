@@ -10,7 +10,7 @@ class ToDoCheckbox extends StatelessWidget {
   });
 
   final ToDo todo;
-  final ToDoNotifier controller;
+  final ToDoStateNotifier controller;
 
   void _showSnackBar(BuildContext context, String message, bool isCompleted) {
     ScaffoldMessenger.of(context).showSnackBar(
