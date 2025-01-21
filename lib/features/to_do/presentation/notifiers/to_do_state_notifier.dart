@@ -1,47 +1,72 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:todo_app/features/to_do/presentation/notifiers/to_do_state.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:todo_app/core/locator.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
-class ToDoStateNotifier extends StateNotifier<ToDoState> {
-  ToDoStateNotifier({required this.toDoRepository})
-      : super(ToDoState.initial());
+class ToDoStateNotifier extends AsyncNotifier<ToDoState> {
+  late final ToDoRepository _toDoRepository = locator<ToDoRepository>();
 
-  final ToDoRepository toDoRepository;
+  @override
+  Future<ToDoState> build() async {
+    return ToDoState.initial();
+  }
 
   Future<void> loadToDos() async {
-    final toDos = await toDoRepository.getToDos();
-    state = state.copyWith(toDos: toDos);
+    state = const AsyncLoading();
+    final toDosResult =
+        await AsyncValue.guard(() => _toDoRepository.getToDos());
+
+    state = toDosResult.map(
+      data: (data) => AsyncData(ToDoState(toDos: data.value)),
+      error: (error) => AsyncError(error.error, error.stackTrace),
+      loading: (_) => const AsyncLoading(),
+    );
   }
 
   Future<void> addToDo({required String title}) async {
-    final toDos = state.toDos;
-    final newId = toDos.isEmpty ? 1 : toDos.last.id + 1;
+    try {
+      final toDos = state.value!.toDos;
+      final newId = toDos.isEmpty ? 1 : toDos.last.id + 1;
 
-    final todo = ToDo(
-      id: newId,
-      title: title,
-      completed: false,
-    );
-    await toDoRepository.addToDo(todo);
-    final updatedToDos = List.of(toDos)..add(todo);
+      final newToDo = ToDo(
+        id: newId,
+        title: title,
+        completed: false,
+      );
 
-    state = state.copyWith(toDos: updatedToDos);
+      await _toDoRepository.addToDo(newToDo);
+      final updatedToDos = List.of(toDos)..add(newToDo);
+
+      state = AsyncData(state.value!.copyWith(toDos: updatedToDos));
+    } catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
+    }
   }
 
   Future<void> updateToDo({required ToDo toDo}) async {
-    final toDos = state.toDos;
-    await toDoRepository.updateToDo(toDo);
-    final updatedToDoList = [
-      for (final item in toDos)
-        if (item.id == toDo.id) toDo else item
-    ];
-    state = state.copyWith(toDos: updatedToDoList);
+    try {
+      final toDos = state.value!.toDos;
+
+      await _toDoRepository.updateToDo(toDo);
+
+      final updatedToDos = [
+        for (final item in toDos)
+          if (item.id == toDo.id) toDo else item,
+      ];
+
+      state = AsyncData(state.value!.copyWith(toDos: updatedToDos));
+    } catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
+    }
   }
 
   Future<void> deleteToDo({required int id}) async {
-    final toDos = state.toDos;
-    await toDoRepository.deleteToDo(id);
-    final updatedToDoList = toDos.where((todo) => todo.id != id).toList();
-    state = state.copyWith(toDos: updatedToDoList);
+    try {
+      final toDos = state.value!.toDos;
+      await _toDoRepository.deleteToDo(id);
+      final updatedToDos = toDos.where((todo) => todo.id != id).toList();
+      state = AsyncData(state.value!.copyWith(toDos: updatedToDos));
+    } catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
+    }
   }
 }
