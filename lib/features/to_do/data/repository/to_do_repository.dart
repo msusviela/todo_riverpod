@@ -3,18 +3,18 @@ import 'package:todo_app/features/to_do/to_do.dart';
 class ToDoRepository {
   final List<ToDo> toDos = [];
 
-  List<ToDo> getToDos() => toDos;
+  Future<List<ToDo>> getToDos() async => toDos;
 
-  void addToDo(ToDo toDo) {
+  Future<void> addToDo(ToDo toDo) async {
     toDos.add(toDo);
   }
 
-  void updateToDo(ToDo toDo) {
+  Future<void> updateToDo(ToDo toDo) async {
     final toDoIndex = toDos.indexWhere((e) => e.id == toDo.id);
     toDos[toDoIndex] = toDo;
   }
 
-  void deleteToDo(int id) {
+  Future<void> deleteToDo(int id) async {
     toDos.removeWhere((todo) => todo.id == id);
   }
 }

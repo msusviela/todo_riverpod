@@ -13,7 +13,7 @@ class ToDoStateNotifier extends StateNotifier<ToDoState> {
     state = state.copyWith(toDos: toDos);
   }
 
-  void addToDo({required String title}) {
+  Future<void> addToDo({required String title}) async {
     final toDos = state.toDos;
     final newId = toDos.isEmpty ? 1 : toDos.last.id + 1;
 
@@ -22,13 +22,15 @@ class ToDoStateNotifier extends StateNotifier<ToDoState> {
       title: title,
       completed: false,
     );
-    toDoRepository.addToDo(todo);
-    state = state.copyWith(toDos: toDoRepository.getToDos().toList());
+    await toDoRepository.addToDo(todo);
+    final updatedToDos = List.of(toDos)..add(todo);
+
+    state = state.copyWith(toDos: updatedToDos);
   }
 
-  void updateToDo({required ToDo toDo}) {
+  Future<void> updateToDo({required ToDo toDo}) async {
     final toDos = state.toDos;
-    toDoRepository.updateToDo(toDo);
+    await toDoRepository.updateToDo(toDo);
     final updatedToDoList = [
       for (final item in toDos)
         if (item.id == toDo.id) toDo else item
@@ -36,9 +38,9 @@ class ToDoStateNotifier extends StateNotifier<ToDoState> {
     state = state.copyWith(toDos: updatedToDoList);
   }
 
-  void deleteToDo({required int id}) {
+  Future<void> deleteToDo({required int id}) async {
     final toDos = state.toDos;
-    toDoRepository.deleteToDo(id);
+    await toDoRepository.deleteToDo(id);
     final updatedToDoList = toDos.where((todo) => todo.id != id).toList();
     state = state.copyWith(toDos: updatedToDoList);
   }
