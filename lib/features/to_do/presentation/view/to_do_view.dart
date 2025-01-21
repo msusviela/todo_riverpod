@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todo_app/extensions/extensions.dart';
 import 'package:todo_app/features/to_do/to_do.dart';
 
 class ToDoView extends ConsumerWidget {
@@ -7,7 +8,26 @@ class ToDoView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final toDos = ref.watch(toDoProvider).toDos;
+    final toDoState = ref.watch(toDoProvider);
+
+    return toDoState.when(
+      data: (state) => _ToDoTabView(toDos: state.toDos),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => ToDoSnackBar(
+        isSuccess: false,
+        message: error.toString(),
+      ),
+    );
+  }
+}
+
+class _ToDoTabView extends StatelessWidget {
+  const _ToDoTabView({required this.toDos});
+
+  final List<ToDo> toDos;
+
+  @override
+  Widget build(BuildContext context) {
     final pendingToDos = toDos.where((toDo) => !toDo.completed).toList();
     final completedToDos = toDos.where((toDo) => toDo.completed).toList();
 

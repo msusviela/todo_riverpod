@@ -28,9 +28,11 @@ void main() {
     registerFallbackValue(FakeToDo());
     mockToDoRepository = MockToDoRepository();
 
-    when(() => mockToDoRepository.getToDos()).thenAnswer((_) => mockToDos);
+    when(() => mockToDoRepository.getToDos())
+        .thenAnswer((_) async => mockToDos);
 
-    when(() => mockToDoRepository.addToDo(any())).thenAnswer((invocation) {
+    when(() => mockToDoRepository.addToDo(any()))
+        .thenAnswer((invocation) async {
       final todo = invocation.positionalArguments.first as ToDo;
       mockToDos.add(todo);
     });
@@ -51,7 +53,6 @@ void main() {
 
       await tester.enterText(find.byType(TextField), 'New Task');
       await tester.tap(find.text('Add'));
-      await tester.pumpAndSettle();
 
       expect(find.text('New Task'), findsOneWidget);
     });

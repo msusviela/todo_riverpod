@@ -22,28 +22,31 @@ void main() {
     mockRepository = MockToDoRepository();
     toDos = [];
 
-    when(() => mockRepository.getToDos()).thenAnswer((_) => toDos);
+    when(() => mockRepository.getToDos()).thenAnswer((_) async => toDos);
 
-    when(() => mockRepository.addToDo(any())).thenAnswer((invocation) {
+    when(() => mockRepository.addToDo(any())).thenAnswer((invocation) async {
       final todo = invocation.positionalArguments.first as ToDo;
       toDos.add(todo);
+      return Future.value();
     });
 
-    when(() => mockRepository.deleteToDo(any())).thenAnswer((invocation) {
+    when(() => mockRepository.deleteToDo(any())).thenAnswer((invocation) async {
       final id = invocation.positionalArguments.first as int;
       toDos.removeWhere((todo) => todo.id == id);
+      return Future.value();
     });
 
-    when(() => mockRepository.updateToDo(any())).thenAnswer((invocation) {
+    when(() => mockRepository.updateToDo(any())).thenAnswer((invocation) async {
       final updated = invocation.positionalArguments.first as ToDo;
       toDos = [
         for (final item in toDos)
           if (item.id == updated.id) updated else item
       ];
+      return Future.value();
     });
   });
 
-  test('Must initialize with an empty list', () {
+  test('Must initialize with an empty list', () async {
     final container = createContainer(
       overrides: [
         toDoProvider.overrideWith(
@@ -54,7 +57,7 @@ void main() {
     expect(container.read(toDoProvider), const ToDoState(toDos: []));
   });
 
-  test('Must add a ToDo to the provider state', () {
+  test('Must add a ToDo to the provider state', () async {
     final container = createContainer(
       overrides: [
         toDoProvider.overrideWith(
@@ -63,14 +66,14 @@ void main() {
     );
 
     final controller = container.read(toDoProvider.notifier);
-    controller.addToDo(title: initialName);
+    await controller.addToDo(title: initialName);
 
     final toDos = container.read(toDoProvider).toDos;
     expect(toDos.length, 1);
     expect(toDos.first.title, initialName);
   });
 
-  test('Must delete a ToDo from the provider state', () {
+  test('Must delete a ToDo from the provider state', () async {
     final container = createContainer(
       overrides: [
         toDoProvider.overrideWith(
@@ -79,16 +82,16 @@ void main() {
     );
 
     final controller = container.read(toDoProvider.notifier);
-    controller.addToDo(title: initialName);
+    await controller.addToDo(title: initialName);
     final toDos = container.read(toDoProvider).toDos;
     final toDo = toDos.first;
 
-    controller.deleteToDo(id: toDo.id);
+    await controller.deleteToDo(id: toDo.id);
 
     expect(container.read(toDoProvider), const ToDoState(toDos: []));
   });
 
-  test('Must update ToDo to be completed', () {
+  test('Must update ToDo to be completed', () async {
     final container = createContainer(
       overrides: [
         toDoProvider.overrideWith(
@@ -97,18 +100,18 @@ void main() {
     );
 
     final controller = container.read(toDoProvider.notifier);
-    controller.addToDo(title: initialName);
+    await controller.addToDo(title: initialName);
     final toDos = container.read(toDoProvider).toDos;
     final toDo = toDos.first;
 
     final updatedToDo = toDo.copyWith(completed: true);
-    controller.updateToDo(toDo: updatedToDo);
+    await controller.updateToDo(toDo: updatedToDo);
 
     final updatedToDos = container.read(toDoProvider).toDos;
     expect(updatedToDos.first.completed, isTrue);
   });
 
-  test('Must update To Do Title', () {
+  test('Must update To Do Title', () async {
     final container = createContainer(
       overrides: [
         toDoProvider.overrideWith(
@@ -117,12 +120,12 @@ void main() {
     );
 
     final controller = container.read(toDoProvider.notifier);
-    controller.addToDo(title: initialName);
+    await controller.addToDo(title: initialName);
     final toDo = container.read(toDoProvider).toDos.first;
 
     const newName = 'New name';
     final updatedToDo = toDo.copyWith(title: newName);
-    controller.updateToDo(toDo: updatedToDo);
+    await controller.updateToDo(toDo: updatedToDo);
 
     final updatedToDos = container.read(toDoProvider).toDos;
     expect(updatedToDos.first.title, equals(newName));
